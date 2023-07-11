@@ -18,4 +18,8 @@
 
 Анимация не тормозит в ImageView, TextView, RecyclerView.
 
+![test1](untitled1.gif "test1")
+
+![test2](untitled2.gif "test1")
+
 https://ru.stackoverflow.com/questions/1513858
