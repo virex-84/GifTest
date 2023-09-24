@@ -2,10 +2,14 @@ package com.virex.giftest.ui.Html;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.text.style.DynamicDrawableSpan;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class AnimatedImageSpan extends DynamicDrawableSpan {
 
@@ -49,6 +53,26 @@ public class AnimatedImageSpan extends DynamicDrawableSpan {
         });
     }
 
+    @Override
+    public int getSize(@NonNull Paint paint, CharSequence text, int start, int end, @Nullable Paint.FontMetricsInt fm) {
+        Drawable d = getDrawable();
+        //java.lang.NullPointerException at android.text.style.DynamicDrawableSpan.getSize
+        if (d==null)
+            return 0;
+
+        Rect rect = d.getBounds();
+
+        if (fm != null) {
+            fm.ascent = -rect.bottom;
+            fm.descent = 0;
+
+            fm.top = fm.ascent;
+            fm.bottom = 0;
+        }
+
+        return rect.right;
+    }
+
     public void setDrawind(boolean isDrawind){
         this.isDrawind = isDrawind;
     }
@@ -80,6 +104,7 @@ public class AnimatedImageSpan extends DynamicDrawableSpan {
     @Override
     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
         Drawable b = getDrawable();
+        if (b==null) return;
         canvas.save();
 
         int transY = bottom - b.getBounds().bottom;

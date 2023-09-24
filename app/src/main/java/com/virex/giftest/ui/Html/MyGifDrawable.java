@@ -45,7 +45,7 @@ public class MyGifDrawable extends BaseGifDrawable implements Runnable, Animatab
      */
     public void nextFrame() {
         mCurrentIndex = (mCurrentIndex + 1) % getNumberOfFrames();
-        if (mCurrentIndex==0) mCurrentIndex=1; //fix
+        if (mCurrentIndex==0) mCurrentIndex=1; //fix первый кадр не отображаем т.к. он не отмасштабирован
         if (mListener != null) mListener.update(this);
     }
 

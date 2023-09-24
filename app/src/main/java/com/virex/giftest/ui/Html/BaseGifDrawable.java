@@ -15,9 +15,24 @@ public class BaseGifDrawable extends AnimationDrawable {
         GifDecoder decoder = new GifDecoder();
         decoder.read(source);
 
+        /*
+        фикс ушами: для гифок с одним кадром - добавляем еще один,
+        и используем только кадр 1 а не 0 (см MyGifDrawable где поправка на использование 1 кадра как начального)
+        т.к. setBounds для текущего AnimationDrawable применяется позже добавления первого кадра
+        и масштабирование первого кадра не срабатывает
+         */
+        int realcount=decoder.getFrameCount();
+        int count=realcount;
+        if (realcount==1)
+            count=2;
+
         // Iterate through the gif frames, add each as animation frame
-        for (int i = 0; i < decoder.getFrameCount(); i++) {
-            Bitmap bitmap = decoder.getFrame(i);
+        for (int i = 0; i < count; i++) {
+            Bitmap bitmap = null;
+            if (realcount==1)
+                bitmap = decoder.getFrame(0);
+            else
+                bitmap = decoder.getFrame(i);
             BitmapDrawable drawable = new BitmapDrawable(bitmap);
             int width = bitmap.getWidth() * 3;
             int height = bitmap.getHeight() * 3;
